@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Dineo ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Georgia', serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:linear-gradient(135deg,#fce4ec,#fff8e1,#f8bbd0);
+}
+
+/* Floating Hearts */
+.hearts{
+    position:fixed;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.heart{
+    position:absolute;
+    color:rgba(255,105,180,0.25);
+    animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(100vh) rotate(0deg);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    to{
+        transform:translateY(-100px) rotate(360deg);
+        opacity:0;
+    }
+}
+
+/* Open Button */
+#startScreen{
+    text-align:center;
+}
+
+.openBtn{
+    padding:18px 45px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(45deg,#ff4081,#e91e63);
+    color:white;
+    font-size:1.2rem;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(233,30,99,.4);
+    transition:.4s;
+}
+
+.openBtn:hover{
+    transform:scale(1.08);
+}
+
+/* Envelope */
+.envelope-container{
+    display:none;
+    perspective:1000px;
+}
+
+.envelope{
+    position:relative;
+    width:340px;
+    height:220px;
+    background:#f8bbd0;
+    border-radius:10px;
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.flap{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:110px;
+    background:#ec407a;
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top;
+    animation:openFlap 2s forwards;
+}
+
+@keyframes openFlap{
+    to{
+        transform:rotateX(180deg);
+    }
+}
+
+.letter{
+    position:absolute;
+    left:20px;
+    top:20px;
+    width:300px;
+    height:420px;
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    transform:translateY(150px);
+    animation:slideLetter 2.5s forwards;
+    overflow-y:auto;
+}
+
+@keyframes slideLetter{
+    to{
+        transform:translateY(-230px);
+    }
+}
+
+h2{
+    color:#e91e63;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+#message{
+    color:#555;
+    line-height:1.8;
+    font-size:1rem;
+    white-space:pre-wrap;
+}
+
+.signature{
+    margin-top:25px;
+    text-align:right;
+    color:#e91e63;
+    font-weight:bold;
+}
+
+@media(max-width:500px){
+    .envelope{
+        width:300px;
+    }
+
+    .letter{
+        width:260px;
+        left:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<audio id="bgMusic" loop>
+    <source src="rumgold.mpeg" type="audio/mpeg">
+</audio>
+
+<div id="startScreen">
+    <button class="openBtn" onclick="openLetter()">
+        💌 Open Letter
+    </button>
+</div>
+
+<div class="envelope-container" id="letterSection">
+    <div class="envelope">
+        <div class="flap"></div>
+
+        <div class="letter">
+            <h2>Good evening Dineo ❤️</h2>
+
+            <div id="message"></div>
+
+            <div class="signature">
+                With Love,<br>
+                L...... ❤️
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const letterText = `I hope this letter finds you smiling.
+
+There are so many things I wish I could tell you every day, and perhaps words will never fully express what rests in my heart.
+
+Even though I may not always be there beside you, please know that I deeply care for you.Time, and life's responsibilities may sometimes keep us apart, but not a single day passes without you crossing my mind.
+
+You are someone very special to me. Your smile, your kindness, your strength, and the beautiful person you are continue to inspire my thoughts more often than you may realize.
+
+Sometimes I find myself wondering how is that you love me this much, whether you are happy, and whether am I doing any justice to you.
+
+I want you to remember this whenever life becomes difficult: you are appreciated, you are valued, and you are loved more than words can adequately explain.
+
+May your days be filled with peace, your nights with rest, and your heart with endless reasons to smile.
+
+No matter where life takes us, a part of my thoughts will always carry your name.
+
+Take care of yourself, Dineo.
+
+You are truly unforgettable. ❤️`;
+
+function openLetter(){
+
+    document.getElementById("startScreen").style.display="none";
+    document.getElementById("letterSection").style.display="block";
+
+    const music = document.getElementById("bgMusic");
+    music.play();
+
+    setTimeout(typeWriter,2500);
+}
+
+let i=0;
+
+function typeWriter(){
+    const msg=document.getElementById("message");
+
+    if(i < letterText.length){
+        msg.innerHTML += letterText.charAt(i);
+        i++;
+        setTimeout(typeWriter,35);
+    }
+}
+
+/* Create Floating Hearts */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+
+    heart.innerHTML="❤";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(Math.random()*20+15)+"px";
+    heart.style.animationDuration=(Math.random()*8+8)+"s";
+
+    document.getElementById("hearts").appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },15000);
+}
+
+setInterval(createHeart,500);
+</script>
+
+</body>
+</html>
